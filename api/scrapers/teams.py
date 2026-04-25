@@ -363,13 +363,15 @@ def _extract_prize_from_text(text: str) -> str:
     """Pull a dollar-amount string from free text, excluding trailing years."""
     if not text:
         return ""
-    match = re.search(r"\$([\d,]+(?:\.\d+)?(?:[KMkm])?)", text)
+    # Stop before years that got concatenated at the end, e.g. "$50,0002024".
+    match = re.search(
+        r"\$(?:\d{1,3}(?:,\d{3})+|\d+)(?:\.\d+)?(?:[KMkm])?",
+        text,
+    )
     if not match:
         return ""
-    
+
     prize = match.group(0)
-    # Remove years that got concatenated at the end (e.g., "2020", "2023", etc.)
-    prize = re.sub(r"(20\d{2}|19\d{2})$", "", prize)
     return prize
 
 
