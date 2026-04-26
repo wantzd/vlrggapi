@@ -16,8 +16,11 @@ env:
 
 jobs:
   test:
-    name: Install dependencies and run tests
+    name: Test Python ${{ matrix.python-version }}
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.11", "3.14"]
 
     steps:
       - name: Checkout code
@@ -32,7 +35,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v6
         with:
-          python-version: "3.11"
+          python-version: ${{ matrix.python-version }}
 
       - name: Install dependencies
         run: uv pip install --system -r requirements.txt
