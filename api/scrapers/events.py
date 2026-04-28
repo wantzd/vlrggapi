@@ -147,15 +147,6 @@ async def vlr_event_matches(event_id: str):
             elif eta_el:
                 match_status = eta_el.text(strip=True)
 
-            vods = []
-            for vod_el in elem.css(".match-item-vod .wf-tag"):
-                vod_text = vod_el.text(strip=True)
-                vod_link_el = vod_el if vod_el.tag == "a" else vod_el.parent
-                vod_href = vod_link_el.attributes.get("href", "") if vod_link_el else ""
-                if vod_href:
-                    vod_href = build_full_url(vod_href)
-                vods.append({"label": vod_text, "url": vod_href})
-
             note_el = elem.css_first(".match-item-note")
             note = note_el.text(strip=True) if note_el else ""
 
@@ -168,7 +159,6 @@ async def vlr_event_matches(event_id: str):
                 "event_series": event_series,
                 "team1": teams[0],
                 "team2": teams[1],
-                "vods": vods,
             })
 
         return {"data": {"status": status, "segments": matches}}
